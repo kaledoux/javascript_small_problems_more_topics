@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>JS Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <script src="8.js" type="text/javascript"></script>
+    <style media="screen">
+      body {
+        background-color: #808080;
+        box-sizing: border-box;
+      }
+
+      .calculator {
+        box-sizing: border-box;
+        display: inline-block;
+        margin-left: 25%;
+        margin-top: 10%;
+        background-color: #2F2F2F;
+        width: 400px;
+        height: 600px;
+      }
+
+      .screen {
+        box-sizing: border-box;
+        background-color: #8FBC8F;
+        color: #2F2F2F;
+        height: 30%;
+        width: 100%;
+      }
+
+      .buttons {
+        box-sizing: border-box;
+        border: 5px solid #000000;
+        display: flex;
+        flex-wrap: wrap;
+        padding: 10px;
+        height: 420px;
+        width: 100%;
+      }
+
+      .btn {
+        min-width: 25%;
+      }
+
+      #operations,
+      #entry {
+        box-sizing: border-box;
+        border: 5px solid #000000;
+        border-radius: 5px;
+      }
+
+      #operations {
+        font-size: 35px;
+        height: 35%;
+        letter-spacing: 5px;
+      }
+
+      #entry {
+        font-size: 60px;
+        height: 65%;
+      }
+    </style>
+  </head>
+  <body>
+    <script id="buildCalculator" type="text/x-handlebars-template">
+      <div class="calculator">
+        <div class="screen">
+          <div id="operations"></div>
+          <div id="entry">0</div>
+        </div>
+        <div class="buttons">
+          {{#each buttons}}
+            <button id="{{this}}" value="{{this}}" class="btn">{{this}}</button>
+          {{/each}}
+        </div>
+      </div>
+    </script>
+  </body>
+</html>

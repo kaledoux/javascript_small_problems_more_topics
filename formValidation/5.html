@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Quiz</title>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <style media="screen">
+
+    </style>
+  </head>
+  <body>
+    <h1>Hitchhiker's Quiz</h1>
+    <form action="#" method="post">
+      <fieldset>
+        <dl>
+
+        </dl>
+        <input type="submit" value="Submit Answers" id="submit_btn">
+        <input type="reset" value="Reset Quiz" id="reset_btn">
+      </fieldset>
+    </form>
+<script id="questionTemplate" type="text/x-handlebars-template">
+<dt>
+  <label for="q{{id}}">{{{description}}}</label>
+</dt>
+<dd>
+  {{#each options}}
+    <input type="radio"
+           id="q{{../id}}"
+           name="q{{../id}}"
+           value="{{this}}">{{this}}
+    </input>
+  {{/each}}
+</dd>
+</script>
+
+<script type="text/javascript">
+  // html formatting
+  const questions = [
+    {
+      id: 1,
+      description: "Who is the author of <cite>The Hitchhiker's Guide to the Galaxy</cite>?",
+      options: ['Dan Simmons', 'Douglas Adams', 'Stephen Fry', 'Robert A. Heinlein'],
+    },
+    {
+      id: 2,
+      description: 'Which of the following numbers is the answer to Life, the \
+                    Universe and Everything?',
+      options: ['66', '13', '111', '42'],
+    },
+    {
+      id: 3,
+      description: 'What is Pan Galactic Gargle Blaster?',
+      options: ['A drink', 'A machine', 'A creature', 'None of the above'],
+    },
+    {
+      id: 4,
+      description: 'Which star system does Ford Prefect belong to?',
+      options: ['Aldebaran', 'Algol', 'Betelgeuse', 'Alpha Centauri'],
+    },
+  ];
+
+  const answerKey = { '1': 'Douglas Adams', '2': '42', '3': 'A drink', '4': 'Betelgeuse' };
+
+  const template = document.querySelector('#questionTemplate').innerHTML;
+  const templateScript = Handlebars.compile(template);
+  const dl = document.querySelector('dl');
+
+  questions.forEach(question => {
+    let newQ = templateScript(question);
+    dl.innerHTML += newQ;
+  });
+
+  // event listeners and related functions
+  function findCorrectAnswer(questionID) {
+    return answerKey[questionID];
+  }
+
+  function getQuestionNumber(currentData) {
+    return currentData.firstElementChild.id[1];
+  }
+
+  function findCheckedAnswer(data) {
+    let inputs = data.querySelectorAll('input');
+    for (let i = 0; i < inputs.length; i++) {
+      if (inputs[i].checked) {
+        return inputs[i].value;
+      }
+    }
+  };
+
+  function clearAnswers() {
+    form.querySelectorAll('dd.displayedAnswer').forEach(dd => dd.remove());
+  }
+
+  const form = document.querySelector('form');
+
+  form.addEventListener('submit', function(event) {
+    // prevent form submission
+    event.preventDefault();
+    // get list of all questions answer banks
+    let questionData = form.querySelectorAll('dd');
+
+    // for each question, check if correct answer given
+    questionData.forEach(dd => {
+      let answer = document.createElement('dd'),
+          selectedAnswer = findCheckedAnswer(dd),
+          correctAnswer = findCorrectAnswer(getQuestionNumber(dd));
+      answer.classList.add('displayedAnswer');
+
+
+      if (selectedAnswer) {
+        if (correctAnswer === selectedAnswer) {
+          answer.textContent = "Correct!";
+        } else {
+          answer.textContent = `Wrong! Correct Answer: ${correctAnswer}`;
+        }
+      } else {
+        answer.textContent = `Not answered! Correct Answer: ${correctAnswer}`;
+      }
+
+      dd.insertAdjacentElement('afterend', answer);
+    });
+
+    // disable submit button
+    form.querySelector("input[type='submit']").disabled = true;
+  });
+
+
+  form.addEventListener('reset', function(e) {
+    clearAnswers();
+    document.querySelector('#submit_btn').disabled = false;
+  });
+</script>
+  </body>
+</html>

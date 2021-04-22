@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>ToDo List</title>
+    <link rel="stylesheet" href="4.css">
+    <script src="4.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+
+  </head>
+  <body>
+    <h1>To Dos for To-Day:</h1>
+    <div class="todo_list">
+      <ul id="todos">
+
+      </ul>
+    </div>
+    <script id="todoItems" type="text/x-handlebars-template">
+{{#each todo_items}}
+  <li data-id="{{id}}">{{title}}</li>
+{{/each}}
+    </script>
+    <script id="confirmDelete" type="text/x-handlebars-template">
+<div class="confirm_delete">
+  <p>Do you really want to delete this todo item?</p>
+  <button type="button" name="yes">Yes</button>
+  <button type="button" name="no">No</button>
+</div>
+    </script>
+    <script id="contextMenu" type="text/x-handlebars-template">
+<div id="context_menu">
+  <button type="button" name="details">View Details</button>
+  <button type="button" name="edit">Edit</button>
+  <button type="button" name="delete">Delete</button>
+</div>
+    </script>
+  </body>
+</html>

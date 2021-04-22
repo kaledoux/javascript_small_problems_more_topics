@@ -1,0 +1,23 @@
+* {
+  box-sizing: border-box;
+  position: relative;
+  padding: 10px;
+}
+
+body {
+  background-color: green;
+}
+
+.todo_list {
+  background-color: red;
+  border: 3px solid green;
+  margin: auto;
+  padding: 10px;
+  width: 50%;
+}
+
+h1 {
+  margin: auto;
+  padding: 10px;
+  width: 50%;
+}

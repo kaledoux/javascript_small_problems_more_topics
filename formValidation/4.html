@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>FormValidation 1</title>
+    <meta charset="utf-8" />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      h1 {
+        color: #fff;
+        font-size: 24px;
+        width: 800px;
+        margin: 70px auto 0 auto;
+      }
+      body {
+        background: #52be43;
+        font-size: 18px;
+      }
+
+      form {
+        width: 800px;
+        margin: 15px auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 4px;
+      }
+
+      dt {
+        padding: 20px 0 5px 0;
+      }
+
+      input {
+        font-size: 18px;
+        width: 300px;
+        height: 38px;
+        padding: 3px 10px;
+        outline: none;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+      }
+
+      input.credit {
+        width: 72px;
+      }
+
+      button {
+        margin-top: 20px;
+        font-size: 16px;
+        font-weight: bold;
+        outline: none;
+        color: #fff;
+        padding: 5px 15px;
+        border-radius: 4px;
+        background: #52be43;
+        border: none;
+      }
+
+      span {
+        border-radius: 4px;
+        border: 1px solid #ccc;
+      }
+
+      block {
+        background-color: white;
+        margin:auto;
+        width: 50%;
+        padding: 10px;
+      }
+
+      .valid {
+        border-color: green;
+      }
+
+      .invalid {
+        border-color: red;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      #form_submit_error {
+        background-color: white;
+        margin:auto;
+        width: 50%;
+        padding: 10px;
+      }
+
+    </style>
+  </head>
+  <body>
+    <span id="form_submit_error" class="invalid hidden">
+      Fix errors before submitting this form.
+    </span>
+    <h1>Sign up Form</h1>
+    <form action="#" method="post" novalidate>
+      <fieldset>
+        <dl>
+          <dt>
+            <label for="first_name">First Name</label>
+          </dt>
+          <dd>
+            <input type="text" id="first_name" name="first_name" required>
+            <span></span>
+          </dd>
+
+          <dt>
+            <label for="last_name">Last Name</label>
+          </dt>
+          <dd>
+            <input type="text" id="last_name" name="last_name" required>
+            <span></span>
+          </dd>
+
+          <dt>
+            <label for="email">Email</label>
+          </dt>
+
+          <dd>
+            <input type="text" required name="email" id="email"
+            placeholder="someone@example.com" pattern=".+@.+">
+            <span></span>
+          </dd>
+
+          <dt>
+            <label for="password">Password</label>
+          </dt>
+
+          <dd>
+            <input type="password" name="password" id="password" minlength=10 required>
+            <span></span>
+          </dd>
+
+          <dt>
+            <label for="credit">Credit Card Number</label>
+          </dt>
+
+          <dd>
+            <input type="text" class="credit" name="credit" id="credit1"
+                   maxlength=4 minlength=4 required>
+            <input type="text" class="credit" name="credit" id="credit2"
+                   maxlength=4 minlength=4 required>
+            <input type="text" class="credit" name="credit" id="credit3"
+                   maxlength=4 minlength=4 required>
+            <input type="text" class="credit" name="credit" id="credit4"
+                   maxlength=4 minlength=4 required>
+
+            <span></span>
+          </dd>
+
+          <dt>
+            <label for="phone">Phone Number</label>
+          </dt>
+
+          <dd>
+            <input type="text" name="phone" id="phone" pattern="\d{3}-\d{3}-\d{4}"
+            placeholder="111-222-3333">
+            <span></span>
+          </dd>
+
+          <button type="submit">Sign Up</button>
+        </dl>
+      </fieldset>
+    </form>
+    <script type="text/javascript" charset="utf-8">
+    //Approach
+    // create event listener on focus
+    //   - find span element (nextElementSibling)
+    //   - set class of span to 'hidden'
+    //   - set class of input to '.valid'
+
+    // create event listener on input blur
+    //   - check the element.validity.valid
+    //     - if true
+    //       - set class of input to .valid
+    //       - find span
+    //         - delete text content of span
+    //         - remove class '.invalid' from span
+    //       - add class 'hidden' to #form_submit_error if allInputsValid
+    //     - if false
+    //       - set class of input to .invalid
+    //       - remove class '.valid'
+    //       - create object to pass in to createErrorMessage (errorContext)
+    //           - {"patternMismatch": element.validity.patternMismatch,
+    //              "tooShort": element.validity.tooShort,
+    //              "valueMissing": element.validity.valueMissing }
+    //       - set text content of associated span element to createErrorMessage(errorContext)
+    //       - set class of span to .invalid
+
+
+    // create event listener on form submission
+    //   - prevent default
+    //   - check all inputs (querySelectorAll)
+    //     - if validity.valid === false
+    //       - remove class 'hidden' from #form_submit_error
+    //       - break
+    //     - else submit form
+    function createErrorMessage(errorContext) {
+      let message;
+      let errors = Object.keys(errorContext);
+
+      for (let i = 0; i < errors.length; i++) {
+        let errorType = errors[i];
+        if (errorContext[errorType] === true) {
+          switch (errorType) {
+            case 'valueMissing':
+            message = 'This value is required.';
+            break;
+            case 'tooShort':
+            message = 'Insufficient number of characters.';
+            break;
+            case 'patternMismatch':
+            message = 'This input is not valid. Please reformat!';
+            break;
+
+          }
+          break;
+        }
+      }
+
+      return message;
+    }
+
+    function allInputsValid() {
+      let inputs = document.querySelectorAll('input');
+      let allValid = true;
+
+      inputs.forEach(input => {
+        if (input.validity.valid === false) {
+          allValid = false;
+        }
+      });
+
+      return allValid;
+    };
+
+    function parseFormData() {
+      let form = document.querySelector('form').elements;
+      let keysAndValues = [],
+          creditValue = '';
+
+      for (let index = 1; index < form.length; index += 1) {
+        let element = form[index],
+            key,
+            value;
+
+
+        if (element.name === 'credit') {
+          creditValue += element.value;
+        } else if (element.type !== 'submit') {
+          key = encodeURIComponent(element.name);
+          value = encodeURIComponent(element.value);
+          keysAndValues.push(`${key}=${value}`);
+        }
+      }
+
+      keysAndValues.push(`credit=${creditValue}`);
+      return keysAndValues.join('&');
+    };
+
+    document.addEventListener('DOMContentLoaded', function(e) {
+      const form = document.querySelector('form')
+
+      document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('focus', function(event) {
+          let span = event.currentTarget.parentNode.lastElementChild;
+          span.classList.add('hidden');
+          event.target.classList.add('valid');
+          event.target.classList.remove('invalid');
+        });
+      });
+
+      document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('blur', function(event) {
+          let t = event.target;
+          let span = event.currentTarget.parentNode.lastElementChild;
+
+          if (t.validity.valid === true) {
+            // change borders for valid input
+            t.classList.add('valid');
+            t.classList.remove('invalid');
+            span.classList.remove('invalid');
+            // hide form error message if all inputs are now valid
+            if (allInputsValid()) {
+              document.querySelector('#form_submit_error').classList.add('hidden')
+              }
+          } else {
+            // change border of input
+            t.classList.add('invalid');
+            t.classList.remove('valid');
+            // create context object for message creation
+            let errorContext = {
+              "patternMismatch": t.validity.patternMismatch,
+              "tooShort": t.validity.tooShort,
+              "valueMissing": t.validity.valueMissing,
+            }
+            // insert text into span and give border
+            span.textContent = createErrorMessage(errorContext);
+            span.classList.add('invalid');
+            span.classList.remove('hidden');
+          }
+        });
+      });
+
+      form.addEventListener('keypress', function(e) {
+        let inputChar = e.key;
+        if (e.target.classList.contains('credit')) {
+          if (/[^0-9]+/g.test(inputChar)) {
+            e.preventDefault();
+          } else {
+            event.target.innerText += inputChar;
+          }
+        } else if (e.target.id === "first_name" || e.target.id === "last_name") {
+          if (/[^A-Za-z'\s]+/g.test(inputChar)) {
+            e.preventDefault();
+          } else {
+            event.target.innerText += inputChar;
+          }
+        }
+      });
+
+      form.addEventListener('keyup', function(e) {
+        let validTargetIds = ['credit1', 'credit2', 'credit3'];
+        if (validTargetIds.includes(e.target.id)) {
+          let nextInput = e.target.nextElementSibling;
+          if (event.target.value.length === 4) {
+            nextInput.focus();
+          }
+        }
+      });
+
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        if (!allInputsValid()) {
+          document.querySelector('#form_submit_error').classList.remove('hidden');
+        }
+        else {
+          let newBlock = document.createElement('block');
+          newBlock.innerText = parseFormData();
+
+          document.body.appendChild(newBlock);
+        }
+      });
+    });
+    </script>
+  </body>
+</html>

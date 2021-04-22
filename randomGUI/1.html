@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Wildlife Of Japan</title>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        height: 100vh;
+      }
+
+      body {
+        display: grid;
+        grid-template-rows: min-content auto min-content;
+      }
+
+      /* for beautification purpose */
+
+      body {
+        text-align: center;
+      }
+
+      header {
+        background-color: teal;
+        font-size: 1.5rem;
+      }
+
+      header,
+      div {
+        padding: 10px;
+      }
+      figure {
+        display: inline-block;
+        z-index: 2;
+      }
+
+      figcaption {
+        width: 300px;
+        padding: 10px;
+        height: 150px;
+        border-radius: 4px;
+        background: rgba(0, 0, 20, 0.7);
+        color: #fff;
+        z-index: 5;
+      }
+
+      figcaption.hidden {
+       display: none;
+      }
+
+      img {
+        height: 200px;
+        max-width: 250px;
+        padding: 10px;
+        flex: 1 auto;
+      }
+
+      .gallery {
+        background-color: black;
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Native Species of Japan</h1>
+    </header>
+    <div class="gallery">
+
+    </div>
+    <script type="text/x-handlebars-template" id="imageTemplate">
+      {{#each pictures}}
+<figure>
+  <img src="{{source}}">
+  <figcaption class="hidden">{{description}}</figcaption>
+</figure>
+      {{/each}}
+    </script>
+    <script type="application/ecmascript">
+      let picSources = {
+        pictures:
+          [{source: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/JapaneseMacaqueM2186.jpg/170px-JapaneseMacaqueM2186.jpg",
+            description: "The Japanese macaque is a terrestrial monkey. It is also called “snow monkey” because it inhabits areas where snow covers the ground for some months of the year. The monkey has a pinkish face and posterior with the rest of the body covered in gray hair. The coat is adapted to the cold area with the thickness increasing as the temperature decreases. The Japanese macaque is omnivorous, eating varieties of food including 213 species of plants, insects, and soil.",
+          },
+          {source: "https://www.worldatlas.com/r/w960-q80/upload/02/a4/17/shutterstock-29839351.jpg",
+            description: "The red-crowned crane is a large crane known is as a symbol of luck and longevity in some parts of the world. The Japanese crane is among the rarest East Asian cranes. Their name originates from the patch of red bare skin on the crown which turns brighter during the breeding season. The red-crowned crane is snow-white in color with black on the lower parts of the wings. Males also have black cheeks, throats, and necks while the females are gray in these spots. The cranes are found in the Hokkaido and are mostly non-migratory. They are omnivores and feed on rice, carrots, and water plants.",
+          },
+          {source: "https://4.bp.blogspot.com/-RidlCm1j3XY/VeuiSF4ZayI/AAAAAAAAAlI/pJmVXIOzOoY6lbWwWqkQXh_Qz_CeglGHgCPcB/s1600/Ussuri-Brown-Bear-Ursus-arctos-lasiotus.jpg",
+            description: "The Ussuri black bear is the largest Asiatic black bear subspecies. It is native to the Far East including the Korean Peninsula. The Ussuri black bear is named after the Ussuri River which runs through Russia and China. It has white or cream “moon” collar that is common on Asiatic black bears but has larger ears compared to other species. The male bear weighs approximately 200 kg while the female weighs 140 kg. Ussuri black bears spend most of their winters in dens and are mainly nocturnal. The bear is technically omnivorous but predominantly herbivorous, feeding on grass, nuts, and termites.",
+          },
+          {source: "https://www.worldatlas.com/r/w960-q80/upload/38/3a/73/shutterstock-780461146.jpg",
+            description: "Stellar's sea lion is a species of sea lion that has been categorized as near-threatened. Their recent significant, unexplained decline has attracted considerable attention. Adult Stellar's sea lions are lighter than most sea lions. Its color ranges from pale yellow to tawny and sometimes reddish. Males can be distinguished from the female by the higher forehead and coarser hair around the neck. The sea lions live in coastal waters because of the cool temperate climate. They are mainly carnivores but can fall a prey to killer whales.",
+          },
+          {source: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2F0%2F0b%2FMauremys_japonica_ishigame.jpg%2F1200px-Mauremys_japonica_ishigame.jpg&f=1&nofb=1",
+            description: "The Japanese pond turtle is a species of turtle belonging to the family Geoemydidae. It is endemic to Japan and is locally known as “Nihon ishigame”. Its population has significantly decreased over the last two decades mainly due to habitat loss. However, it is yet to be declared threatened. The turtle has a yellowish-brown carapace and olive-brown head. The female is bigger than the male and can grow up to 21 centimeters long. However, males have longer tails. The diet of a Japanese pond turtle is varied and include frogs, water insects, tadpoles, and earthworms.",
+          },
+          {source: "https://www.worldatlas.com/r/w960-q80/upload/05/c3/db/shutterstock-689301112.jpg",
+            description: "The green pheasant is endemic and native to the Japanese Archipelago and the national bird of Japan. It is mainly found in Honshu, Kyushu, and Shikoku. The bird is spread throughout its range and can always be seen on farmlands and human settlement. The male green pheasant has green plumage on its breast and flanks while the female has brownish-black plumage. The males are slightly larger than the female. In Japan, those with hunting licenses are allowed to hunt the bird. They can capture at most two male birds per day. However, shooting a female bird is not permitted.",
+          },
+          {source: "https://upload.wikimedia.org/wikipedia/commons/c/ce/Cryptobranchus_japonicus.jpg",
+            description: "The Japanese giant salamander is endemic to Japan and found across southwestern Japan. An adult salamander can grow to approximately 5 feet long and weigh 55 pounds. The Japanese giant salamander is the second largest amphibian in the world. It has a brown and black skin that helps it to camouflage against river bottoms. Its eyes are small and have no eyelids while the mouth runs across the width of the head. The Japanese giant salamander protects itself from predators by releasing a strong-smelling milky substance. Its diet consists of insects, fish, and frogs.",
+          },
+          {source: "https://www.worldatlas.com/r/w960-q80/upload/66/4e/81/shutterstock-546895903.jpg",
+            description: "The Sika deer is a deer species native to parts of East Asia and also introduced in some parts of the world. The species is in overabundant in Japan. The name “Sika” comes from the Japanese word “Shika” which means deer. The Sika deer is among the few species of deer that do not its spots upon reaching maturity. Some species have large spots while others have nearly invisible spots. The pelage color ranges from mahogany to black. The coat darkens during winter. It mainly forages during the day in patchy clearings in the forest.",
+          }]
+      };
+      let galTemplate = document.querySelector('#imageTemplate').innerHTML;
+      let buildGallery = Handlebars.compile(galTemplate);
+
+      document.addEventListener('DOMContentLoaded', function(e) {
+        const gallery = document.querySelector('.gallery');
+        let html = buildGallery(picSources);
+        gallery.innerHTML += html;
+
+        let hoverTimeout;
+
+        gallery.querySelectorAll('figure').forEach(fig => {
+          fig.addEventListener('mouseenter', function(e) {
+              hoverTimeout = setTimeout(function() {
+                let figCap = e.target.lastElementChild;
+                figCap.classList.remove('hidden');
+              }, 2000);
+          });
+
+          fig.addEventListener('mouseleave', function(e) {
+              clearInterval(hoverTimeout)
+              e.target.lastElementChild.classList.add('hidden');
+          });
+        });
+
+      });
+      </script>
+  </body>
+</html>

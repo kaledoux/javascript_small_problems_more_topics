@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Programming Languages</title>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <style media="screen">
+      button.hidden,
+      span.hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+        Handlebars.registerHelper('hasOver120Chars', function(p) {
+          return p.split('').length > 121;
+        });
+    </script>
+    <script id="languagesTemplate" type="text/x-handlebars-template">
+{{#each languages}}
+<div class="language" id="{{name}}">
+  <h2>{{name}}</h2>
+  <p>{{description}}</p>
+  {{#if (hasOver120Chars description)}}
+  <button type="button" name="showMore">Show More!</button>
+  <button type="button" name="showLess" class="hidden">Show Less!</button>
+  {{/if}}
+</div>
+{{/each}}
+    </script>
+    <script type="text/javascript">
+      let context = {
+        languages: [
+        {name: "Bash",
+         description: "Bash is a command processor that typically runs in a text window where the user types commands that cause actions. Bash can also read and execute commands from a file, called a shell script. Like all Unix shells, it supports filename globbing (wildcard matching), piping, here documents, command substitution, variables, and control structures for condition-testing and iteration. The keywords, syntax, dynamically scoped variables and other basic features of the language are all copied from sh. Other features, e.g., history, are copied from csh and ksh. Bash is a POSIX-compliant shell, but with a number of extensions.",},
+        {name: "C++",
+         description: "C++ is a general-purpose programming language created by Bjarne Stroustrup as an extension of the C programming language, or C with Classes. The language has expanded significantly over time, and modern C++ now has object-oriented, generic, and functional features in addition to facilities for low-level memory manipulation. It is almost always implemented as a compiled language, and many vendors provide C++ compilers, including the Free Software Foundation, LLVM, Microsoft, Intel, Oracle, and IBM, so it is available on many platforms."},
+        {name: "Perl",
+         description: "Perl is a family of two high-level, general-purpose, interpreted, dynamic programming languages. Perl refers to Perl 5, but from 2000 to 2019 it also referred to its redesigned sister language, Perl 6, before the latter's name was officially changed to Raku in October 2019.[8][9]",},
+        {name: "Squirrel",
+         description: "Squirrel is a high level imperative, object-oriented programming language, designed to be a lightweight scripting language that fits in the size, memory bandwidth, and real-time requirements of applications like video games and embedded systems.",},
+        {name: 'Lisp',
+        description: 'Lisp (historically, LISP) is a family of computer programming languages ',
+        },
+        ],
+      }
+
+      const controlTextView = {
+        markHidden(paragraph) {
+          let chars = paragraph.innerHTML.split('');
+          chars.splice(140, 0, "<span class='hidden'>");
+          chars.splice(chars.length, 0, "</span>");
+          paragraph.innerHTML = chars.join('');
+        },
+
+        showLess(paragraph) {
+          paragraph.firstElementChild.classList.add('hidden');
+        },
+
+        showMore(paragraph) {
+          paragraph.firstElementChild.classList.remove('hidden');
+        },
+      };
+
+      document.addEventListener('DOMContentLoaded', function(event) {
+        const langTemplate = document.querySelector('#languagesTemplate').innerHTML;
+        const createLanguageDivs = Handlebars.compile(langTemplate);
+        document.body.innerHTML += createLanguageDivs(context);
+
+        document.querySelectorAll('p').forEach(para => {
+          controlTextView.markHidden(para);
+        });
+
+        document.addEventListener('click', function(e) {
+          if (e.target.getAttribute('name') === 'showMore') {
+            controlTextView.showMore(e.target.previousElementSibling);
+            e.target.classList.toggle('hidden');
+            e.target.nextElementSibling.classList.toggle('hidden');
+          } else if (e.target.getAttribute('name') === 'showLess') {
+            controlTextView.showLess(e.target.previousElementSibling.previousElementSibling);
+            e.target.classList.toggle('hidden');
+            e.target.previousElementSibling.classList.toggle('hidden');
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
